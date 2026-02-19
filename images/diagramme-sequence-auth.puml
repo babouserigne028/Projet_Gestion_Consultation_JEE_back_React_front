@@ -1,0 +1,60 @@
+@startuml Diagramme de Séquence - Authentification JWT
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+title Diagramme de Séquence - Authentification JWT
+
+actor Utilisateur
+participant "Frontend\n(React)" as Frontend
+participant "API REST\n(JAX-RS)" as API
+participant "AuthService" as Auth
+database "Database\n(MySQL)" as DB
+
+== Phase 1: Connexion ==
+
+Utilisateur -> Frontend: 1. Saisie email/password
+
+Frontend -> API: 2. POST /auth/login\n{email, password}
+
+API -> Auth: 3. login(email, password)
+
+Auth -> DB: 4. SELECT utilisateur\nWHERE email = ?
+
+DB --> Auth: Utilisateur
+
+Auth -> Auth: 5. BCrypt.checkpw()\nVérification hash
+
+Auth -> Auth: 6. Vérifier actif=true
+
+Auth -> Auth: 7. JWTUtil.generateToken()\nClaims: id, email, role\nExpiration: 24h
+
+Auth --> API: Token JWT
+
+API --> Frontend: 8. Response 200 OK\n{token, user: {...}}
+
+Frontend -> Frontend: 9. Redux: store token\nlocalStorage.setItem()
+
+Frontend --> Utilisateur: 10. Redirection dashboard
+
+== Phase 2: Requêtes Authentifiées ==
+
+Utilisateur -> Frontend: 11. Action protégée
+
+Frontend -> API: 12. GET /api/protected\nHeader: Authorization:\nBearer <token>
+
+API -> API: 13. JWTAuthFilter\n.filter(request)
+
+API -> API: 14. JWTUtil.validateToken()\nVérifie signature + exp
+
+alt Token valide
+    API -> API: 15. Continue traitement
+    API --> Frontend: 16. Response 200 OK
+    Frontend --> Utilisateur: Résultat
+else Token invalide/expiré
+    API --> Frontend: 401 Unauthorized
+    Frontend --> Utilisateur: Redirection login
+end
+
+@enduml

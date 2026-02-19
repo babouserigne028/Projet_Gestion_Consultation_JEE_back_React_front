@@ -1,0 +1,52 @@
+@startuml Architecture 3-Tiers
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageBackgroundColor WhiteSmoke
+
+title Architecture 3-Tiers - Système de Consultation Médicale
+
+package "COUCHE PRÉSENTATION\n(Frontend - React.js)" as presentation {
+    component "Patient\nDashboard" as patientUI
+    component "Médecin\nDashboard" as medecinUI
+    component "Admin\nDashboard" as adminUI
+}
+
+package "COUCHE MÉTIER\n(Backend - Jakarta EE / Payara)" as business {
+    component "JAX-RS Resources" as resources {
+        [RendezVousResources]
+        [UtilisateurResources]
+        [AuthResources]
+    }
+    
+    component "CDI Services" as services {
+        [RendezVousService]
+        [MedecinService]
+        [PatientService]
+    }
+    
+    component "JPA Entities" as entities {
+        [Utilisateur]
+        [Patient]
+        [Medecin]
+        [Crenaux]
+        [RendezVous]
+    }
+}
+
+package "COUCHE DONNÉES\n(MySQL Database)" as data {
+    database "consultation_db" as db {
+        [utilisateur]
+        [patient]
+        [medecin]
+        [service]
+        [crenaux]
+        [rendez_vous]
+        [planning_config]
+    }
+}
+
+presentation -down-> business : "HTTP / REST API"
+business -down-> data : "JDBC / JTA"
+
+@enduml

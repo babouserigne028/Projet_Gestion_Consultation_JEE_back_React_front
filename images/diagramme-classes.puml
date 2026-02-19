@@ -1,0 +1,123 @@
+@startuml Diagramme de Classes - Système de Consultation Médicale
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+
+' ==================== ENUMERATIONS ====================
+enum Role {
+    ADMIN
+    MEDECIN
+    PATIENT
+}
+
+enum StatutCrenau {
+    LIBRE
+    RESERVE
+    BLOQUE
+    OCCUPE
+}
+
+enum StatutRDV {
+    EN_ATTENTE
+    CONFIRME
+    ANNULE
+    TERMINE
+    ABSENT
+}
+
+' ==================== ENTITES ====================
+class Utilisateur {
+    - id: Long
+    - nom: String
+    - prenom: String
+    - email: String
+    - telephone: String
+    - motDePasse: String
+    - role: Role
+    - actif: boolean
+    --
+    + getters()
+    + setters()
+}
+
+class Patient {
+    - id: Long
+    - dateNaissance: LocalDate
+    - adresse: String
+    - utilisateur: Utilisateur
+    --
+    + getRendezVous(): List<RendezVous>
+    + getters() / setters()
+}
+
+class Medecin {
+    - id: Long
+    - specialite: String
+    - dureeSeance: Integer
+    - adresseCabinet: String
+    - utilisateur: Utilisateur
+    - service: Service
+    --
+    + getCreneaux(): List<Crenaux>
+    + getters() / setters()
+}
+
+class Service {
+    - id: Long
+    - nom: String
+    - description: String
+    --
+    + getMedecins(): List<Medecin>
+    + getters() / setters()
+}
+
+class Crenaux {
+    - id: Long
+    - dateDay: LocalDate
+    - heureDebut: LocalTime
+    - heureFin: LocalTime
+    - statut: StatutCrenau
+    - medecin: Medecin
+    --
+    + getters() / setters()
+}
+
+class RendezVous {
+    - id: Long
+    - motif: String
+    - statutRdv: StatutRDV
+    - tokenAnnulation: String
+    - dateCreation: LocalDateTime
+    - patient: Patient
+    - creneau: Crenaux
+    --
+    + getters() / setters()
+}
+
+class PlanningConfig {
+    - id: Long
+    - medecin: Medecin
+    - jourSemaine: Integer
+    - heureDebut: LocalTime
+    - heureFin: LocalTime
+    - actif: boolean
+    --
+    + getters() / setters()
+}
+
+' ==================== RELATIONS ====================
+Utilisateur "1" --o "0..1" Patient : possède
+Utilisateur "1" --o "0..1" Medecin : possède
+Service "1" --o "*" Medecin : contient
+Medecin "1" --o "*" Crenaux : propose
+Medecin "1" --o "*" PlanningConfig : configure
+Crenaux "1" --o "0..1" RendezVous : associé à
+Patient "1" --o "*" RendezVous : effectue
+
+Utilisateur --> Role : utilise
+Crenaux --> StatutCrenau : a
+RendezVous --> StatutRDV : a
+
+@enduml

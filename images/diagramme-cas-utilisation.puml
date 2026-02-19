@@ -1,0 +1,108 @@
+@startuml Diagramme de Cas d'Utilisation - Système de Consultation Médicale
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam actorStyle awesome
+
+' ==================== ACTEURS ====================
+actor "Patient" as patient
+actor "Médecin" as medecin
+actor "Administrateur" as admin
+
+' ==================== SYSTÈME ====================
+rectangle "Système de Gestion de Consultations Médicales" {
+
+    ' --- Cas d'utilisation Authentification ---
+    package "Authentification" {
+        usecase "S'authentifier" as UC_AUTH
+        usecase "Se déconnecter" as UC_LOGOUT
+        usecase "Modifier mot de passe" as UC_PWD
+    }
+
+    ' --- Cas d'utilisation Patient ---
+    package "Gestion Patient" {
+        usecase "Consulter les services\ndisponibles" as UC_SERVICES
+        usecase "Rechercher un médecin" as UC_SEARCH_MED
+        usecase "Consulter créneaux\ndisponibles" as UC_VIEW_SLOTS
+        usecase "Prendre un rendez-vous" as UC_BOOK
+        usecase "Consulter mes rendez-vous" as UC_MY_RDV
+        usecase "Annuler un rendez-vous" as UC_CANCEL
+        usecase "Consulter l'historique" as UC_HISTORY
+        usecase "Gérer mon profil" as UC_PROFILE_P
+    }
+
+    ' --- Cas d'utilisation Médecin ---
+    package "Gestion Médecin" {
+        usecase "Configurer mon planning" as UC_PLANNING
+        usecase "Générer mes créneaux" as UC_GEN_SLOTS
+        usecase "Gérer mes créneaux" as UC_MANAGE_SLOTS
+        usecase "Consulter mes RDV\ndu jour" as UC_TODAY_RDV
+        usecase "Confirmer un RDV" as UC_CONFIRM
+        usecase "Marquer RDV terminé" as UC_COMPLETE
+        usecase "Marquer patient absent" as UC_ABSENT
+        usecase "Consulter historique\nconsultations" as UC_HIST_MED
+        usecase "Gérer mon profil" as UC_PROFILE_M
+    }
+
+    ' --- Cas d'utilisation Admin ---
+    package "Administration" {
+        usecase "Gérer les utilisateurs" as UC_USERS
+        usecase "Créer un médecin" as UC_CREATE_MED
+        usecase "Créer un admin" as UC_CREATE_ADMIN
+        usecase "Gérer les services" as UC_ADMIN_SERVICES
+        usecase "Consulter les statistiques" as UC_STATS
+        usecase "Superviser les RDV" as UC_SUPERVISE
+        usecase "Désactiver un compte" as UC_DEACTIVATE
+    }
+}
+
+' ==================== RELATIONS PATIENT ====================
+patient --> UC_AUTH
+patient --> UC_LOGOUT
+patient --> UC_PWD
+patient --> UC_SERVICES
+patient --> UC_SEARCH_MED
+patient --> UC_VIEW_SLOTS
+patient --> UC_BOOK
+patient --> UC_MY_RDV
+patient --> UC_CANCEL
+patient --> UC_HISTORY
+patient --> UC_PROFILE_P
+
+' ==================== RELATIONS MÉDECIN ====================
+medecin --> UC_AUTH
+medecin --> UC_LOGOUT
+medecin --> UC_PWD
+medecin --> UC_PLANNING
+medecin --> UC_GEN_SLOTS
+medecin --> UC_MANAGE_SLOTS
+medecin --> UC_TODAY_RDV
+medecin --> UC_CONFIRM
+medecin --> UC_COMPLETE
+medecin --> UC_ABSENT
+medecin --> UC_HIST_MED
+medecin --> UC_PROFILE_M
+
+' ==================== RELATIONS ADMIN ====================
+admin --> UC_AUTH
+admin --> UC_LOGOUT
+admin --> UC_USERS
+admin --> UC_CREATE_MED
+admin --> UC_CREATE_ADMIN
+admin --> UC_ADMIN_SERVICES
+admin --> UC_STATS
+admin --> UC_SUPERVISE
+admin --> UC_DEACTIVATE
+
+' ==================== RELATIONS INCLUDE/EXTEND ====================
+UC_BOOK ..> UC_VIEW_SLOTS : <<include>>
+UC_BOOK ..> UC_SEARCH_MED : <<include>>
+UC_CANCEL ..> UC_MY_RDV : <<include>>
+UC_GEN_SLOTS ..> UC_PLANNING : <<include>>
+UC_CONFIRM ..> UC_TODAY_RDV : <<include>>
+UC_COMPLETE ..> UC_TODAY_RDV : <<include>>
+UC_ABSENT ..> UC_TODAY_RDV : <<include>>
+
+@enduml

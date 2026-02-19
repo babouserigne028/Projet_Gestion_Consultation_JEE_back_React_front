@@ -1,0 +1,43 @@
+@startuml Diagramme de Déploiement
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam nodeBackgroundColor WhiteSmoke
+
+title Diagramme de Déploiement - Système de Consultation Médicale
+
+node "Client Browser" as client {
+    artifact "React Application" as react {
+        component "bundle.js"
+        component "index.html"
+    }
+}
+
+node "Application Server" as appserver {
+    node "Payara Server Micro" as payara {
+        artifact "consultation.war" as war {
+            component "JAX-RS Resources" as jaxrs
+            component "CDI Services" as cdi
+            component "JPA Entities" as jpa
+        }
+    }
+}
+
+node "Database Server" as dbserver {
+    database "MySQL 8.x" as mysql {
+        storage "consultation_db" {
+            artifact "utilisateur"
+            artifact "patient"
+            artifact "medecin"
+            artifact "service"
+            artifact "crenaux"
+            artifact "rendez_vous"
+            artifact "planning_config"
+        }
+    }
+}
+
+client -down-> appserver : "HTTP/HTTPS\n(Port 5173 dev / 80 prod)"
+appserver -down-> dbserver : "JDBC\n(Port 3306)"
+
+@enduml

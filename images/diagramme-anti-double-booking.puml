@@ -1,0 +1,43 @@
+@startuml Algorithme Anti-Double Booking
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ActivityBackgroundColor WhiteSmoke
+
+title Algorithme Anti-Double Booking
+
+start
+
+:Requête réservation;
+
+:Début Transaction;
+
+:Acquérir LOCK sur créneau\n(PESSIMISTIC_WRITE);
+
+if (Lock acquis?) then (oui)
+    :Vérifier statut = LIBRE?;
+    
+    if (Statut = LIBRE?) then (oui)
+        :Double vérification:\nCOUNT(rdv) = 0 ?;
+        
+        if (COUNT = 0?) then (oui)
+            :Créer RDV;
+            :Statut → RESERVE;
+            :FLUSH;
+            :COMMIT;
+            #palegreen:201 CREATED;
+            stop
+        else (non)
+            #salmon:400 BAD_REQUEST\n"Déjà réservé";
+            stop
+        endif
+    else (non)
+        #salmon:400 BAD_REQUEST\n"Non disponible";
+        stop
+    endif
+else (non / timeout)
+    #orange:409 CONFLICT\n"Réessayez";
+    stop
+endif
+
+@enduml

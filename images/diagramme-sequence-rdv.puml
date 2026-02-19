@@ -1,0 +1,53 @@
+@startuml Diagramme de Séquence - Prise de Rendez-Vous
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+title Diagramme de Séquence - Prise de Rendez-Vous\n(avec gestion anti-double booking)
+
+actor Patient
+participant "Frontend\n(React)" as Frontend
+participant "API REST\n(JAX-RS)" as API
+participant "CDI Service\n(RendezVousService)" as Service
+database "Database\n(MySQL)" as DB
+
+Patient -> Frontend: 1. Sélectionne créneau
+
+Frontend -> API: 2. POST /rendezvous\n+ JWT Token (Header)
+
+API -> API: 3. JWTAuthFilter\nvalide token
+
+API -> Service: 4. prendreRendezVous()
+
+Service -> DB: 5. BEGIN TRANSACTION
+
+Service -> DB: 6. SELECT patient
+
+Service -> DB: 7. SELECT creneau\nFOR UPDATE (LOCK)\nPESSIMISTIC_WRITE
+
+alt Créneau disponible
+    Service -> Service: 8. Vérifier statut = LIBRE
+    
+    Service -> DB: 9. COUNT(rdv) = 0 ?
+    
+    Service -> DB: 10. INSERT rendez_vous
+    
+    Service -> DB: 11. UPDATE creneau\nSET statut=RESERVE
+    
+    Service -> DB: 12. em.flush()
+    
+    Service -> DB: 13. COMMIT\n(Libère le verrou)
+    
+    Service --> API: RendezVous créé
+    
+    API --> Frontend: 14. Response 201 Created\n+ RendezVous JSON
+    
+    Frontend --> Patient: 15. Confirmation affichée
+else Créneau non disponible
+    Service --> API: IllegalArgumentException
+    API --> Frontend: 400 Bad Request\n"Créneau non disponible"
+    Frontend --> Patient: Message d'erreur
+end
+
+@enduml

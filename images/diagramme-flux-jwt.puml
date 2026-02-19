@@ -1,0 +1,31 @@
+@startuml Flux Authentification JWT
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+title Flux d'Authentification JWT
+
+actor Client
+participant "API REST" as API
+participant "AuthService" as Auth
+
+== Connexion ==
+
+Client -> API: 1. POST /auth/login\n{email, password}
+
+API -> Auth: 2. Vérifier credentials
+
+Auth --> API: 3. Générer JWT
+
+API --> Client: 4. Response {token}
+
+== Requête Authentifiée ==
+
+Client -> API: 5. GET /api/rendezvous\nHeader: Bearer token
+
+API -> API: 6. JWTAuthFilter\nvalide le token
+
+API --> Client: 7. Response 200 OK
+
+@enduml

@@ -1,0 +1,2 @@
+create-jdbc-connection-pool --datasourceclassname=com.mysql.cj.jdbc.MysqlDataSource --restype=javax.sql.DataSource --property user=consultationDb:password=consultationDb:url=jdbc\:mysql://localhost:3306/consultationDb consultationPool
+create-jdbc-resource --connectionpoolid=consultationPool jdbc/consultationDb
