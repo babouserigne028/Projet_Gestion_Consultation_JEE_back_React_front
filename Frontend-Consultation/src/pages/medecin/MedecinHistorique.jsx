@@ -36,7 +36,7 @@ function MedecinHistorique() {
   // Adapter les données de l'API pour l'interface
   const historiqueAdapte = historique.map((rdv) => ({
     id: rdv.id,
-    date: rdv.creneau?.dateCreneau || rdv.date,
+    date: rdv.creneau?.dateDay || rdv.date,
     heure: rdv.creneau?.heureDebut || rdv.heure,
     patient: {
       nom: rdv.patient?.nom || rdv.patient?.utilisateur?.nom || "N/A",

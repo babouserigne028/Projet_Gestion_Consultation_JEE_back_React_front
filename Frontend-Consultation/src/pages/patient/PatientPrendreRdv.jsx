@@ -252,13 +252,12 @@ function PatientPrendreRdv() {
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                      {medecin.utilisateur?.prenom?.[0] || "M"}
-                      {medecin.utilisateur?.nom?.[0] || "D"}
+                      {medecin.prenom?.[0] || "M"}
+                      {medecin.nom?.[0] || "D"}
                     </div>
                     <div className="flex-1">
                       <h3 className="font-extrabold text-blue-900 text-lg">
-                        Dr {medecin.utilisateur?.prenom}{" "}
-                        {medecin.utilisateur?.nom}
+                        Dr {medecin.prenom} {medecin.nom}
                       </h3>
                       <p className="text-blue-600 font-medium mb-2">
                         {medecin.specialite || serviceSelectionne.nom}
@@ -295,9 +294,8 @@ function PatientPrendreRdv() {
         <div className="bg-white/90 border border-blue-200 rounded-2xl shadow-xl p-6">
           <h2 className="text-xl font-extrabold text-blue-800 mb-4 flex items-center gap-2">
             <FaClock className="text-blue-600" />
-            Choisissez un créneau avec Dr{" "}
-            {medecinSelectionne.utilisateur?.prenom}{" "}
-            {medecinSelectionne.utilisateur?.nom}
+            Choisissez un créneau avec Dr {medecinSelectionne.prenom}{" "}
+            {medecinSelectionne.nom}
           </h2>
 
           {loadingCreneaux ? (
@@ -359,8 +357,7 @@ function PatientPrendreRdv() {
                     Médecin
                   </div>
                   <div className="text-blue-900">
-                    Dr {medecinSelectionne?.utilisateur?.prenom}{" "}
-                    {medecinSelectionne?.utilisateur?.nom}
+                    Dr {medecinSelectionne?.prenom} {medecinSelectionne?.nom}
                   </div>
                 </div>
                 <div>

@@ -4,7 +4,7 @@
 
 ---
 
-**Réalisé par :** [Votre Nom]  
+**Réalisé par :** Serigne Abdoulaye BABOU - Madeleine SARR - Abdoul Aziz DIAGNE - Souleymane BARRY
 **Date :** Février 2026  
 **Version :** 1.0
 
@@ -781,5 +781,5 @@ public class CORSFilter implements ContainerRequestFilter, ContainerResponseFilt
 ---
 
 **Document généré le :** Février 2026  
-**Auteur :** [Votre Nom]  
+**Auteur :** Serigne Abdoulaye BABOU - Madeleine SARR - Abdoul Aziz DIAGNE - Souleymane BARRY  
 **Projet :** Système de Gestion des Consultations Médicales

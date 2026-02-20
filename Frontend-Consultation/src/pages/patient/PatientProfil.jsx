@@ -15,6 +15,7 @@ import {
   FaShieldAlt,
   FaHistory,
   FaSpinner,
+  FaCamera,
 } from "react-icons/fa";
 import { useUpdatePatient, useStatsPatient } from "../../services";
 import { updateUser } from "../../store/userSlice";

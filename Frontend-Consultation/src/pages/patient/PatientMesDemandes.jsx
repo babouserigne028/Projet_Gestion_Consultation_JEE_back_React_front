@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   FaClock,
   FaCalendarAlt,
@@ -16,6 +17,7 @@ import { useRendezVousPatient, useAnnulerRendezVous } from "../../services";
 
 function PatientMesDemandes() {
   const currentUser = useSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
   const patientId = currentUser?.patientId;
 
   const {
@@ -360,7 +362,10 @@ function PatientMesDemandes() {
                 ? "Aucune demande ne correspond à vos critères de recherche."
                 : "Vous n'avez pas encore fait de demande de rendez-vous."}
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all">
+            <button
+              onClick={() => navigate("/patient/prendre-rdv")}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all"
+            >
               Prendre un nouveau RDV
             </button>
           </div>

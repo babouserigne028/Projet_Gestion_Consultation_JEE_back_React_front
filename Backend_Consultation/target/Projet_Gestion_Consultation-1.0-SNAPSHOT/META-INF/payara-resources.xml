@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <jdbc-connection-pool name="consultationPool" datasource-classname="com.mysql.cj.jdbc.MysqlDataSource"
+                          res-type="javax.sql.DataSource" 
+                          is-connection-validation-required="true" validation-method="auto-commit">
+        <property name="user" value="consultationDb"/>
+        <property name="password" value="consultationDb"/>
+        <property name="URL" value="jdbc:mysql://localhost:3306/consultationDb"/>
+    </jdbc-connection-pool>
+
+    <jdbc-resource jndi-name="jdbc/consultationDb" pool-name="consultationPool"/>
+</resources>

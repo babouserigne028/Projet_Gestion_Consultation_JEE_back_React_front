@@ -20,6 +20,7 @@ import java.time.LocalDate;
 
 @ApplicationScoped
 public class AuthService {
+    
     @jakarta.inject.Inject
     private ServiceService serviceService;
 

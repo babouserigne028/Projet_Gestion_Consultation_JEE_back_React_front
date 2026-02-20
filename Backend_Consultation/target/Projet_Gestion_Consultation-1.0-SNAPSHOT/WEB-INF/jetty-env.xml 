@@ -1,0 +1,13 @@
+<Configure id="webapp" class="org.eclipse.jetty.webapp.WebAppContext">
+  <New id="consultationDb" class="org.eclipse.jetty.plus.jndi.Resource">
+    <Arg><Ref id="webapp"/></Arg>
+    <Arg>jdbc/consultationDb</Arg>
+    <Arg>
+      <New class="com.mysql.cj.jdbc.MysqlDataSource">
+        <Set name="URL">jdbc:mysql://localhost:3306/consultationDb</Set>
+        <Set name="User">consultationDb</Set>
+        <Set name="Password">consultationDb</Set>
+      </New>
+    </Arg>
+  </New>
+</Configure>
